@@ -4,10 +4,9 @@ pragma solidity 0.6.10;
 import "./IAdapter.sol";
 import "./IntegrationSignatures.sol";
 
-// 1. Rename contract, @title comment, and file to your adapter name
-/// @title My Adapter contract
+/// @title Maker Adapter contract
 /// @dev This is the main file that you'll need to edit to implement your adapter's behavior
-contract MyAdapter is IAdapter, IntegrationSignatures {
+contract MakerAdapter is IAdapter, IntegrationSignatures {
     /// @notice Parses the fund assets to be spent given a specified adapter method and set of encoded args
     /// @param _methodSelector The bytes4 selector for the function signature being called
     /// @param _encodedArgs The encoded params to use in the integration call
