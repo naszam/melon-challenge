@@ -1,4 +1,5 @@
-pragma solidity ^0.6.0;
+/// SPDX-License-Identifier: GPL-3.0
+pragma solidity 0.6.10;
 
 /// @title Integration Signatures Contract
 /// @dev Create a selector constant for each of your callable adapter methods (not including parseOutgoingAssets())

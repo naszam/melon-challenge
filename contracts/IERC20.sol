@@ -1,4 +1,5 @@
-pragma solidity ^0.6.0;
+/// SPDX-License-Identifier: GPL-3.0
+pragma solidity 0.6.10;
 
 /// @title Simple IERC20 interface
 /// @dev If you need access to decimals, symbol, name, feel free to add them here
