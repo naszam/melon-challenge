@@ -21,12 +21,10 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
 
       VatLike public vat;
       bytes32 public ilk;
-      GemLike public gem;
 
-      constructor(address vat_, bytes32 ilk_, address gem_) public {
+      constructor(address vat_, bytes32 ilk_) public {
         vat = VatLike(vat_);
         ilk = ilk_;
-        gem = GemLike(gem_);
       }
 
     /// @notice Parses the fund assets to be spent given a specified adapter method and set of encoded args
@@ -47,17 +45,16 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
     }
 
     // 3. Add your own adapter functions here. You can have one or many primary functions and helpers.
-    /// @dev see https://github.com/makerdao/dss/blob/2ad32fdfb18d3869c88392c7c0caf1cde5302a15/src/join.sol#L62
-    function join(address urn, uint wad) public {
-        require(int(wad) >= 0);
-        vat.slip(ilk, urn, int(wad));
-        require(gem.transferFrom(msg.sender, address(this), wad));
+    /// @dev see https://github.com/makerdao/dss/blob/2ad32fdfb18d3869c88392c7c0caf1cde5302a15/src/join.sol#L84
+    function join(address urn) public payable {
+      require(int(msg.value) >= 0);
+      vat.slip(ilk, urn, int(msg.value));
     }
 
-    function exit(address usr, uint wad) public {
-        address urn = msg.sender;
-        require(int(wad) >= 0);
-        vat.slip(ilk, urn, -int(wad));
-        require(gem.transfer(usr, wad));
+    function exit(address payable usr, uint wad) public {
+      address urn = msg.sender;
+      require(int(wad) >= 0);
+      vat.slip(ilk, urn, -int(wad));
+      usr.transfer(wad);
     }
 }
