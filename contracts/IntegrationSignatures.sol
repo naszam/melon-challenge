@@ -8,6 +8,6 @@ contract IntegrationSignatures {
     // For example:
     // bytes4 constant public TAKE_ORDER_SELECTOR = bytes4(keccak256("takeOrder(bytes)"));
 
-    bytes4 constant public JOIN_SELECTOR = bytes4(keccak256("join(address,uint)"));
+    bytes4 constant public JOIN_SELECTOR = bytes4(keccak256("join(address)"));
     bytes4 constant public EXIT_SELECTOR = bytes4(keccak256("exit(address,uint)"));
 }
