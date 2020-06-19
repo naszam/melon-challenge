@@ -15,16 +15,26 @@ interface VatLike {
     function flux(bytes32,address,address,uint) external;
 }
 
+interface WETHLike{
+    /// @dev see https://github.com/dapphub/ds-weth/blob/master/src/weth9.sol#L34
+    function deposit() external payable;
+    function withdraw(uint wad) external;
+}
+
 /// @title Maker Adapter contract
 /// @dev This is the main file that you'll need to edit to implement your adapter's behavior
 contract MakerAdapter is IAdapter, IntegrationSignatures {
 
       VatLike public vat;
       bytes32 public ilk;
+      WETHLike public weth;
 
-      constructor(address vat_, bytes32 ilk_) public {
+      constructor(address vat_, bytes32 ilk_, address weth_) public {
         vat = VatLike(vat_);
         ilk = ilk_;
+
+        /// @dev https://etherscan.io/token/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2
+        weth = WETHLike(weth_);
       }
 
     /// @notice Parses the fund assets to be spent given a specified adapter method and set of encoded args
