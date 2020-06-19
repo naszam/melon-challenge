@@ -4,9 +4,31 @@ pragma solidity 0.6.10;
 import "./IAdapter.sol";
 import "./IntegrationSignatures.sol";
 
+interface GemLike {
+    function transfer(address,uint) external returns (bool);
+    function transferFrom(address,address,uint) external returns (bool);
+}
+
+interface VatLike {
+    function slip(bytes32,address,int) external;
+    function move(address,address,uint) external;
+    function flux(bytes32,address,address,uint) external;
+}
+
 /// @title Maker Adapter contract
 /// @dev This is the main file that you'll need to edit to implement your adapter's behavior
 contract MakerAdapter is IAdapter, IntegrationSignatures {
+
+      VatLike public vat;
+      bytes32 public ilk;
+      GemLike public gem;
+
+      constructor(address vat_, bytes32 ilk_, address gem_) public {
+        vat = VatLike(vat_);
+        ilk = ilk_;
+        gem = GemLike(gem_);
+      }
+
     /// @notice Parses the fund assets to be spent given a specified adapter method and set of encoded args
     /// @param _methodSelector The bytes4 selector for the function signature being called
     /// @param _encodedArgs The encoded params to use in the integration call
@@ -20,10 +42,22 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
     {
         // 2. Complete this function, which is meant to parse the expected assets that each function method will use
 
-        // YOUR CODE HERE
+
+
     }
 
     // 3. Add your own adapter functions here. You can have one or many primary functions and helpers.
+    /// @dev see https://github.com/makerdao/dss/blob/2ad32fdfb18d3869c88392c7c0caf1cde5302a15/src/join.sol#L62
+    function join(address urn, uint wad) public {
+        require(int(wad) >= 0);
+        vat.slip(ilk, urn, int(wad));
+        require(gem.transferFrom(msg.sender, address(this), wad));
+    }
 
-    // YOUR CODE HERE
+    function exit(address usr, uint wad) public {
+        address urn = msg.sender;
+        require(int(wad) >= 0);
+        vat.slip(ilk, urn, -int(wad));
+        require(gem.transfer(usr, wad));
+    }
 }
