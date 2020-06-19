@@ -4,11 +4,6 @@ pragma solidity 0.6.10;
 import "./IAdapter.sol";
 import "./IntegrationSignatures.sol";
 
-interface GemLike {
-    function transfer(address,uint) external returns (bool);
-    function transferFrom(address,address,uint) external returns (bool);
-}
-
 interface VatLike {
     function slip(bytes32,address,int) external;
     function move(address,address,uint) external;
