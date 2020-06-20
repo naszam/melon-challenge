@@ -35,13 +35,13 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
         returns (address[] memory outgoingAssets_, uint256[] memory outgoingAmounts_)
     {
         // 2. Complete this function, which is meant to parse the expected assets that each function method will use
-        if (_methodSelector == JOIN_SELECTOR) {
+        if (_methodSelector == BORROW_SELECTOR) {
 
           outgoingAssets_ = new address[](1);
           outgoingAssets_[0] = ETHJoin;
 
         }
-        else if (_methodSelector == EXIT_SELECTOR) {
+        else if (_methodSelector == REDEEM_SELECTOR) {
           outgoingAssets_ = new address[](1);
           outgoingAssets_[0] = WETH;
         }
@@ -55,7 +55,7 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
     /// @dev see https://github.com/makerdao/dss/blob/2ad32fdfb18d3869c88392c7c0caf1cde5302a15/src/join.sol#L84
 
 
-    function __fillJoin(bytes memory _encodedArgs)
+    function __fillBorrow(bytes memory _encodedArgs)
         internal
         {
 
@@ -64,7 +64,7 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
 
         }
 
-  function __fillExit(bytes memory _encodedArgs)
+  function __fillRedeem(bytes memory _encodedArgs)
         internal
         {
 
