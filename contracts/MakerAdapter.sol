@@ -15,12 +15,10 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
       address immutable public WETH;
 
 
-      constructor(address eth_, address weth_) public {
+      constructor(address eth_) public {
 
         ETHJoin = eth_;
 
-        /// @dev https://etherscan.io/token/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2
-        WETH = weth_;
       }
 
     /// @notice Parses the fund assets to be spent given a specified adapter method and set of encoded args
