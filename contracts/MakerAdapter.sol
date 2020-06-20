@@ -58,8 +58,9 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
     function borrow(bytes memory _encodedArgs)
         internal
         {
-
           (uint etherQuantity) = __decodeBorrowArgs(_encodedArgs);
+          // Convert WETH to ETH
+          IWeth(payable()).withdraw(etherQuantity);
           IETHJoin(ETHJoin).join(address(this), etherQuantity);
 
         }
@@ -70,6 +71,8 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
 
           (uint wad) = __decodeRedeemArgs(_encodedArgs);
           IETHJoin(ETHJoin).exit(address(this), wad);
+          // Convert ETH to WETH
+          IWeth(payable()).deposit{value: wad}();
 
         }
 
