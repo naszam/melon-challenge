@@ -55,7 +55,7 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
     /// @dev see https://github.com/makerdao/dss/blob/2ad32fdfb18d3869c88392c7c0caf1cde5302a15/src/join.sol#L84
 
 
-    function __fillLend(bytes memory _encodedArgs)
+    function __fillJoin(bytes memory _encodedArgs)
             internal
             override
         {
@@ -65,7 +65,7 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
 
         }
 
-  function __fillRedeem(bytes memory _encodedArgs)
+  function __fillExit(bytes memory _encodedArgs)
         internal
         override
         {
