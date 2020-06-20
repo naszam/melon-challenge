@@ -52,7 +52,6 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
     }
 
     // 3. Add your own adapter functions here. You can have one or many primary functions and helpers.
-    /// @dev see https://github.com/makerdao/dss/blob/2ad32fdfb18d3869c88392c7c0caf1cde5302a15/src/join.sol#L84
 
 
     function borrow(bytes memory _encodedArgs)
