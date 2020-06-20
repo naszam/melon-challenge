@@ -56,18 +56,16 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
 
 
     function __fillJoin(bytes memory _encodedArgs)
-            internal
-            override
+        internal
         {
 
-          (etherQuantity) = __decodeJoinArgs(_encodedArgs);
-          ETHJoinLike(ETHJoin).join(address(this), etherQuantity);
+          (uint etherQuantity) = __decodeJoinArgs(_encodedArgs);
+          IETHJoin(ETHJoin).join(address(this), etherQuantity);
 
         }
 
   function __fillExit(bytes memory _encodedArgs)
         internal
-        override
         {
 
           (uint wad ) = __decodeExitArgs(_encodedArgs);
