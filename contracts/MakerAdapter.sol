@@ -15,9 +15,10 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
       address immutable public WETH;
 
 
-      constructor(address eth_) public {
+      constructor(address eth_, address weth_) public {
 
         ETHJoin = eth_;
+        WETH = weth_;
 
       }
 
@@ -35,14 +36,17 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
         // 2. Complete this function, which is meant to parse the expected assets that each function method will use
         if (_methodSelector == BORROW_SELECTOR) {
           (uint etherQuantity) = __decodeBorrowArgs(_encodedArgs);
+
           outgoingAssets_ = new address[](1);
           outgoingAssets_[0] = ETHJoin;
+          outgoingAmounts_[0] = etherQuantity;
 
         }
         else if (_methodSelector == REDEEM_SELECTOR) {
           (uint wad) = __decodeRedeemArgs(_encodedArgs);
           outgoingAssets_ = new address[](1);
           outgoingAssets_[0] = WETH;
+          outgoingAmounts_[0] = wad;
         }
         else {
           revert("parseOutgoingAssets: _methodSelector invalid");
@@ -58,7 +62,7 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
         {
           (uint etherQuantity) = __decodeBorrowArgs(_encodedArgs);
           // Convert WETH to ETH
-          IWeth(payable()).withdraw(etherQuantity);
+          IWeth(WETH).withdraw(etherQuantity);
           IETHJoin(ETHJoin).join(address(this), etherQuantity);
 
         }
@@ -70,7 +74,7 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
           (uint wad) = __decodeRedeemArgs(_encodedArgs);
           IETHJoin(ETHJoin).exit(address(this), wad);
           // Convert ETH to WETH
-          IWeth(payable()).deposit{value: wad}();
+          IWeth(WETH).deposit{value: wad}();
 
         }
 
