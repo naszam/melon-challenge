@@ -35,11 +35,11 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
     {
         // 2. Complete this function, which is meant to parse the expected assets that each function method will use
         if (_methodSelector == BORROW_SELECTOR) {
-          (uint etherQuantity) = __decodeBorrowArgs(_encodedArgs);
+          (address vault, uint amount) = __decodeBorrowArgs(_encodedArgs);
 
           outgoingAssets_ = new address[](1);
-          outgoingAssets_[0] = ETHJoin;
-          outgoingAmounts_[0] = etherQuantity;
+          outgoingAssets_[0] = vault;
+          outgoingAmounts_[0] = amount;
 
         }
         else if (_methodSelector == REDEEM_SELECTOR) {
@@ -60,10 +60,10 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
     function borrow(bytes memory _encodedArgs)
         internal
         {
-          (uint etherQuantity) = __decodeBorrowArgs(_encodedArgs);
+          (address vault, uint amount) = __decodeBorrowArgs(_encodedArgs);
           // Convert WETH to ETH
-          IWeth(WETH).withdraw(etherQuantity);
-          IETHJoin(ETHJoin).join(address(this), etherQuantity);
+          IWeth(WETH).withdraw(amount);
+          IETHJoin(ETHJoin).join{value: amount}(vault);
 
         }
 
@@ -81,9 +81,9 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
     function __decodeBorrowArgs(bytes memory _encodedArgs)
         private
         pure
-        returns (uint etherQuantity )
+        returns (address vault, uint amount)
     {
-        return abi.decode(_encodedArgs, (uint));
+        return abi.decode(_encodedArgs, (address,uint));
     }
 
     function __decodeRedeemArgs(bytes memory _encodedArgs)
