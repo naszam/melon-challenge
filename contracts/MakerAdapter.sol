@@ -59,8 +59,8 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
     // 3. Add your own adapter functions here. You can have one or many primary functions and helpers.
 
 
-    function borrow(bytes memory _encodedArgs)
-        public
+    function borrow(bytes calldata _encodedArgs)
+        external
         returns (address[] memory)
         {
           (address[] memory assets, uint[] memory amounts) = __decodeBorrowArgs(_encodedArgs);
@@ -78,8 +78,8 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
 
         }
 
-    function redeem(bytes memory _encodedArgs)
-        public
+    function redeem(bytes calldata _encodedArgs)
+        external
         returns (address[] memory)
         {
           (address[] memory assets, uint[] memory amounts) = __decodeRedeemArgs(_encodedArgs);
@@ -96,7 +96,7 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
           return (fillAssets);
         }
 
-    function __decodeBorrowArgs(bytes memory _encodedArgs)
+    function __decodeBorrowArgs(bytes calldata _encodedArgs)
         private
         pure
         returns (address[] memory assets_, uint[] memory amount_)
@@ -104,7 +104,7 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
         return abi.decode(_encodedArgs, (address[],uint[]));
     }
 
-    function __decodeRedeemArgs(bytes memory _encodedArgs)
+    function __decodeRedeemArgs(bytes calldata _encodedArgs)
         private
         pure
         returns (address[] memory assets_, uint[] memory amounts_)
