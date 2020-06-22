@@ -43,9 +43,9 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
 
         }
         else if (_methodSelector == REDEEM_SELECTOR) {
-          (uint wad) = __decodeRedeemArgs(_encodedArgs);
+          (address usr, uint wad) = __decodeRedeemArgs(_encodedArgs);
           outgoingAssets_ = new address[](1);
-          outgoingAssets_[0] = WETH;
+          outgoingAssets_[0] = usr;
           outgoingAmounts_[0] = wad;
         }
         else {
@@ -71,8 +71,8 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
         internal
         {
 
-          (uint wad) = __decodeRedeemArgs(_encodedArgs);
-          IETHJoin(ETHJoin).exit(address(this), wad);
+          (address usr, uint wad) = __decodeRedeemArgs(_encodedArgs);
+          IETHJoin(ETHJoin).exit(usr, wad);
           // Convert ETH to WETH
           IWeth(WETH).deposit{value: wad}();
 
@@ -81,7 +81,7 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
     function __decodeBorrowArgs(bytes memory _encodedArgs)
         private
         pure
-        returns (address vault, uint amount)
+        returns (address vault_, uint amount_)
     {
         return abi.decode(_encodedArgs, (address,uint));
     }
@@ -89,9 +89,9 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
     function __decodeRedeemArgs(bytes memory _encodedArgs)
         private
         pure
-        returns (uint wad_)
+        returns (address usr_, uint wad_)
     {
-        return abi.decode(_encodedArgs, (uint));
+        return abi.decode(_encodedArgs, (address,uint));
     }
 
 }
