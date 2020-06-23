@@ -57,4 +57,18 @@ contract SimpleVault {
             if (IERC20(asset).balanceOf(address(this)) == 0) isOwnedAsset[asset] = false;
         }
     }
+
+    /// @notice Adds an asset to the vault's owned assets
+    /// @param _asset The asset to add to the vault
+    /// @dev This exists purely to aid with writing tests,
+    /// since you'll need some balance in order to test your adapter.
+    function addOwnedAsset(address _asset) external {
+        if (
+            !isOwnedAsset[_asset] &&
+            IERC20(_asset).balanceOf(address(this)) > 0
+        )
+        {
+            isOwnedAsset[_asset] = true;
+        }
+    }
 }
