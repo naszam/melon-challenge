@@ -38,6 +38,7 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
           (address[] memory assets, uint[] memory amounts) = __decodeBorrowArgs(_encodedArgs);
 
           outgoingAssets_ = new address[](assets.length);
+          outgoingAmounts_ = new uint[](amounts.length);
           for (uint i = 0; i < assets.length; i++) {
               outgoingAssets_[i] = assets[i];
               outgoingAmounts_[i] = amounts[i];
@@ -48,6 +49,7 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
           (address[] memory assets, uint[] memory amounts) = __decodeRedeemArgs(_encodedArgs);
 
           outgoingAssets_ = new address[](assets.length);
+          outgoingAmounts_ = new uint[](amounts.length);
           for (uint i = 0; i < assets.length; i++) {
               outgoingAssets_[i] = assets[i];
               outgoingAmounts_[i] = amounts[i];
