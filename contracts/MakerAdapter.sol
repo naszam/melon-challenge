@@ -16,7 +16,7 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
 
       constructor() public {
 
-        ETHJoin = 0x2f0b23f53734252bda2277357e97e1517d6b042a;
+        ETHJoin = 0x2F0b23f53734252Bda2277357e97e1517d6B042A;
 
       }
 
