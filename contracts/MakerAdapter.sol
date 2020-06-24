@@ -3,7 +3,7 @@ pragma solidity 0.6.10;
 
 import "./IAdapter.sol";
 import "./IntegrationSignatures.sol";
-import "./IWeth.sol";
+import "./WETH.sol";
 import "./IETHJoin.sol";
 
 
@@ -12,13 +12,11 @@ import "./IETHJoin.sol";
 contract MakerAdapter is IAdapter, IntegrationSignatures {
 
       address immutable public ETHJoin;
-      address immutable public WETH;
 
 
-      constructor(address eth_, address weth_) public {
+      constructor(address eth_) public {
 
         ETHJoin = eth_;
-        WETH = weth_;
 
       }
 
@@ -75,7 +73,7 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
           for (uint i = 0; i < assets.length; i++) {
             fillAssets[i] = assets[i];
             // Convert WETH to ETH
-            IWeth(WETH).withdraw(amounts[i]);
+            WETH(payable(fillAssets[i])).withdraw(amounts[i]);
             IETHJoin(ETHJoin).join{value: amounts[i]}(fillAssets[i]);
           }
 
@@ -95,7 +93,7 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
             fillAssets[i] = assets[i];
             IETHJoin(ETHJoin).exit(fillAssets[i], amounts[i]);
             // Convert ETH to WETH
-            IWeth(WETH).deposit{value: amounts[i]}();
+            WETH(payable(fillAssets[i])).deposit{value: amounts[i]}();
           }
 
           return (fillAssets);
