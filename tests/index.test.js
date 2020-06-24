@@ -1,5 +1,7 @@
 const { ethers } = require("ethers")
 const Ganache = require("ganache-core")
+const { accounts, contract } = require('@openzeppelin/test-environment');
+
 
 const MAINNET_NODE_URL = ""
 const PRIV_KEY = ""
@@ -22,29 +24,33 @@ const startChain = async () => {
   return wallet
 }
 
+jest.setTimeout(100000)
+const uniswap = require("@studydefi/money-legos/uniswap")
 const erc20 = require("@studydefi/money-legos/erc20")
+const MakerAdapter = contract.fromArtifact('MakerAdapter');
+const SimpleVault = contract.fromArtifact('SimpleVault');
 
 describe("do some tests", () => {
-let wallet
+  let wallet
 
- beforeAll(async () => {
-  wallet = await startChain()
- })
+  beforeAll(async () => {
+    wallet = await startChain()
+  })
 
   test("initial DAI balance of 0", async () => {
-     const daiContract = new ethers.Contract(
-         erc20.dai.address,
-         erc20.dai.abi,
-         wallet
-  )
-   const daiBalanceWei = await daiContract.balanceOf(wallet.address)
-   const daiBalance = ethers.utils.formatUnits(daiBalanceWei, 18)
-   expect(parseFloat(daiBalance)).toBe(0)
-})
+    const daiContract = new ethers.Contract(
+      erc20.dai.address,
+      erc20.dai.abi,
+      wallet
+    )
+    const daiBalanceWei = await daiContract.balanceOf(wallet.address)
+    const daiBalance = ethers.utils.formatUnits(daiBalanceWei, 18)
+    expect(parseFloat(daiBalance)).toBe(0)
+  })
 
- test("initial ETH balance of 1000 ETH", async () => {
+  test("initial ETH balance of 1000 ETH", async () => {
     const ethBalanceWei = await wallet.getBalance()
     const ethBalance = ethers.utils.formatEther(ethBalanceWei)
     expect(parseFloat(ethBalance)).toBe(1000)
- })
+  })
 })
