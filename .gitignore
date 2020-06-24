@@ -3,3 +3,7 @@
 
 # Truffle build
 build/
+
+# Tests
+tests/node_modules/
+.secret

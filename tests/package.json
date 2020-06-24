@@ -1,0 +1,20 @@
+{
+  "name": "tests",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@studydefi/money-legos": "^2.3.4",
+    "ethers": "^5.0.2"
+  },
+  "devDependencies": {
+    "ganache-core": "^2.10.2",
+    "jest": "^26.1.0"
+  }
+}
