@@ -14,6 +14,7 @@
     "ethers": "^5.0.2"
   },
   "devDependencies": {
+    "@openzeppelin/test-environment": "^0.1.4",
     "ganache-core": "^2.10.2",
     "jest": "^26.1.0"
   }
