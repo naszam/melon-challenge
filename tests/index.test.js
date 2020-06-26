@@ -24,6 +24,7 @@ const startChain = async () => {
   return wallet
 }
 
+jest.setTimeout(100000)
 const erc20 = require("@studydefi/money-legos/erc20")
 const MakerAdapter = contract.fromArtifact('MakerAdapter');
 const SimpleVault = contract.fromArtifact('SimpleVault');
@@ -64,8 +65,11 @@ describe("do some tests", () => {
       wallet
     )
 
+    const makerAdapterContract = await MakerAdapter.new()
+    const simpleVaultContract = await SimpleVault.new()
+
     await wethContract.deposit({
-    value: ethers.utils.parseEther("1.0"),
+    value: ethers.utils.parseEther("10.0"),
     gasLimit: 1000000,
     })
 
@@ -73,6 +77,16 @@ describe("do some tests", () => {
     const wethBal = await wethContract.balanceOf(wallet.address)
 
     console.log(`WETH Balance: ${ethers.utils.formatEther(wethBal)}`)
+
+
+    await wethContract.transferFrom(wallet.address, simpleVaultContract.address, wethBal)
+    //await simpleVaultContract.addOwnedAsset(wethContract.address, {from: accounts[0]})
+    /*
+    var abiCoder = ethers.utils.defaultAbiCoder;
+    const ethBalance = ethers.utils.formatEther(100000)
+    var args = abiCoder.encode(wallet.address,);
+    await makerAdapterContract.callOnIntegration(MakerAdapter.address, MakerAdapter.BORROW_SELECTOR(), args)
+    */
   })
 
 
