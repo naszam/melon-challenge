@@ -74,7 +74,7 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
             fillAssets[i] = assets[i];
             // Convert WETH to ETH
             WETH(payable(fillAssets[i])).withdraw(amounts[i]);
-            IETHJoin(ETHJoin).join{value: amounts[i]}(fillAssets[i]);
+            IETHJoin(ETHJoin).join{value: amounts[i]}(address(this));
           }
 
           return (fillAssets);
@@ -91,7 +91,7 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
 
           for (uint i = 0; i < assets.length; i++) {
             fillAssets[i] = assets[i];
-            IETHJoin(ETHJoin).exit(fillAssets[i], amounts[i]);
+            IETHJoin(ETHJoin).exit(address(this), amounts[i]);
             // Convert ETH to WETH
             WETH(payable(fillAssets[i])).deposit{value: amounts[i]}();
           }
