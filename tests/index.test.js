@@ -80,6 +80,11 @@ describe("do some tests", () => {
 
 
     await wethContract.transferFrom(wallet.address, simpleVaultContract.address, wethBal)
+
+
+    const vaultBal = await wethContract.balanceOf(simpleVaultContract.address)
+
+    console.log(`Simple Vault WETH Balance: ${ethers.utils.formatEther(vaultBal)}`)
     //await simpleVaultContract.addOwnedAsset(wethContract.address, {from: accounts[0]})
     /*
     var abiCoder = ethers.utils.defaultAbiCoder;
