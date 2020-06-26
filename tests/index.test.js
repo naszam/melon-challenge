@@ -35,17 +35,20 @@ describe("do some tests", () => {
 
   beforeAll(async () => {
     wallet = await startChain()
+
   })
 
-  test("initial DAI balance of 0", async () => {
-    const daiContract = new ethers.Contract(
-      erc20.dai.address,
-      erc20.dai.abi,
+  test("initial WETH balance of 0", async () => {
+
+    const weth = new ethers.Contract(
+      erc20.weth.address,
+      erc20.weth.abi,
       wallet
     )
-    const daiBalanceWei = await daiContract.balanceOf(wallet.address)
-    const daiBalance = ethers.utils.formatUnits(daiBalanceWei, 18)
-    expect(parseFloat(daiBalance)).toBe(0)
+
+    const wethBalanceWei = await weth.balanceOf(wallet.address)
+    const wethBalance = ethers.utils.formatUnits(wethBalanceWei, 18)
+    expect(parseFloat(wethBalance)).toBe(0)
   })
 
   test("initial ETH balance of 1000 ETH", async () => {
@@ -53,4 +56,26 @@ describe("do some tests", () => {
     const ethBalance = ethers.utils.formatEther(ethBalanceWei)
     expect(parseFloat(ethBalance)).toBe(1000)
   })
+
+
+  test("deposit WETH", async () => {
+
+    const wethContract = new ethers.Contract(
+      erc20.weth.address,
+      erc20.weth.abi,
+      wallet
+    )
+
+    await wethContract.deposit({
+    value: ethers.utils.parseEther("1.0"),
+    gasLimit: 1000000,
+    })
+
+
+    const wethBal = await wethContract.balanceOf(wallet.address)
+
+    console.log(`WETH Balance: ${ethers.utils.formatEther(wethBal)}`)
+  })
+
+
 })
