@@ -24,8 +24,6 @@ const startChain = async () => {
   return wallet
 }
 
-jest.setTimeout(100000)
-const uniswap = require("@studydefi/money-legos/uniswap")
 const erc20 = require("@studydefi/money-legos/erc20")
 const MakerAdapter = contract.fromArtifact('MakerAdapter');
 const SimpleVault = contract.fromArtifact('SimpleVault');
