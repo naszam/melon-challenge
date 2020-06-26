@@ -57,8 +57,9 @@ describe("do some tests", () => {
   })
 
 
-  test("deposit WETH", async () => {
+  test("Maker Adapter Test", async () => {
 
+    // Deposit WETH in wallet
     const wethContract = new ethers.Contract(
       erc20.weth.address,
       erc20.weth.abi,
@@ -78,13 +79,20 @@ describe("do some tests", () => {
 
     console.log(`WETH Balance: ${ethers.utils.formatEther(wethBal)}`)
 
+    // Send ether to Simple Vault
+    let tx = {
+        to: simpleVaultContract.address,
+        // ... or supports ENS names
+        // to: "ricmoo.firefly.eth",
 
-    await wethContract.transferFrom(wallet.address, simpleVaultContract.address, wethBal)
+        // We must pass in the amount as wei (1 ether = 1e18 wei), so we
+        // use this convenience function to convert ether to wei.
+        value: ethers.utils.parseEther('1.0')
+    };
 
 
-    const vaultBal = await wethContract.balanceOf(simpleVaultContract.address)
-
-    console.log(`Simple Vault WETH Balance: ${ethers.utils.formatEther(vaultBal)}`)
+    await wallet.sendTransaction(tx)
+ })
     //await simpleVaultContract.addOwnedAsset(wethContract.address, {from: accounts[0]})
     /*
     var abiCoder = ethers.utils.defaultAbiCoder;
@@ -92,7 +100,5 @@ describe("do some tests", () => {
     var args = abiCoder.encode(wallet.address,);
     await makerAdapterContract.callOnIntegration(MakerAdapter.address, MakerAdapter.BORROW_SELECTOR(), args)
     */
-  })
-
 
 })
