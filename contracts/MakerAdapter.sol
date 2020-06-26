@@ -68,16 +68,13 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
         {
           (address[] memory assets, uint[] memory amounts) = __decodeBorrowArgs(_encodedArgs);
 
-          address[] memory fillAssets = new address[](assets.length);
-
           for (uint i = 0; i < assets.length; i++) {
-            fillAssets[i] = assets[i];
             // Convert WETH to ETH
-            WETH(payable(fillAssets[i])).withdraw(amounts[i]);
+            WETH(payable(assets[i])).withdraw(amounts[i]);
             IETHJoin(ETHJoin).join{value: amounts[i]}(address(this));
           }
 
-          return (fillAssets);
+          return (assets);
 
         }
 
@@ -87,16 +84,13 @@ contract MakerAdapter is IAdapter, IntegrationSignatures {
         {
           (address[] memory assets, uint[] memory amounts) = __decodeRedeemArgs(_encodedArgs);
 
-          address[] memory fillAssets = new address[](assets.length);
-
           for (uint i = 0; i < assets.length; i++) {
-            fillAssets[i] = assets[i];
             IETHJoin(ETHJoin).exit(address(this), amounts[i]);
             // Convert ETH to WETH
-            WETH(payable(fillAssets[i])).deposit{value: amounts[i]}();
+            WETH(payable(assets[i])).deposit{value: amounts[i]}();
           }
 
-          return (fillAssets);
+          return (assets);
         }
 
     function __decodeBorrowArgs(bytes calldata _encodedArgs)
